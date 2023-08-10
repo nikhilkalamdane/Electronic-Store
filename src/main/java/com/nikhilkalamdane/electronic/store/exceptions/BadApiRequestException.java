@@ -1,12 +1,30 @@
 package com.nikhilkalamdane.electronic.store.exceptions;
 
-public class BadApiRequestException extends RuntimeException{
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-    public BadApiRequestException(){
+/**
+ * Custom exception class for representing a bad API request.
+ */
+public class BadApiRequestException extends RuntimeException {
+
+    private static final Logger logger = LoggerFactory.getLogger(BadApiRequestException.class);
+
+    /**
+     * Constructs a new BadApiRequestException with a default message.
+     */
+    public BadApiRequestException() {
         super("Bad Request !!!");
+        logger.error("BadApiRequestException: Bad Request !!!");
     }
 
-    public BadApiRequestException(String message){
+    /**
+     * Constructs a new BadApiRequestException with a custom message.
+     *
+     * @param message The custom error message.
+     */
+    public BadApiRequestException(String message) {
         super(message);
+        logger.error("BadApiRequestException: {}", message);
     }
 }

@@ -1,15 +1,30 @@
 package com.nikhilkalamdane.electronic.store.exceptions;
 
-import lombok.Builder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Builder
-public class ResourceNotFoundException extends RuntimeException{
+/**
+ * Custom exception class for representing a resource not found exception.
+ */
+public class ResourceNotFoundException extends RuntimeException {
 
-    public ResourceNotFoundException(){
+    private static final Logger logger = LoggerFactory.getLogger(ResourceNotFoundException.class);
+
+    /**
+     * Constructs a new ResourceNotFoundException with a default message.
+     */
+    public ResourceNotFoundException() {
         super("Resource Not Found!!!");
+        logger.error("ResourceNotFoundException: Resource Not Found!!!");
     }
 
-    public ResourceNotFoundException(String message){
+    /**
+     * Constructs a new ResourceNotFoundException with a custom message.
+     *
+     * @param message The custom error message.
+     */
+    public ResourceNotFoundException(String message) {
         super(message);
+        logger.error("ResourceNotFoundException: {}", message);
     }
 }

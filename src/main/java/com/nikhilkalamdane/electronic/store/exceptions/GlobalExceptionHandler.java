@@ -15,17 +15,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Global exception handler class to handle various exceptions across the application.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    //handler resource not found
+    /**
+     * Handles the ResourceNotFoundException and returns a response with NOT_FOUND status.
+     *
+     * @param ex The ResourceNotFoundException instance.
+     * @return ResponseEntity with ApiResponseMessage containing error details.
+     */
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiResponseMessage> resourceNotFoundExceptionHandler(ResourceNotFoundException ex){
+    public ResponseEntity<ApiResponseMessage> resourceNotFoundExceptionHandler(ResourceNotFoundException ex) {
+        logger.info("Resource not found: {}", ex.getMessage());
 
-        logger.info("Exception handler invoked!!!");
         ApiResponseMessage response = ApiResponseMessage.builder()
                 .message(ex.getMessage())
                 .status(HttpStatus.NOT_FOUND)
@@ -35,25 +42,37 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
-    //MethodArgumentNotValidException -- Validation Exception
+    /**
+     * Handles MethodArgumentNotValidException (Validation Exception) and returns validation error details.
+     *
+     * @param ex The MethodArgumentNotValidException instance.
+     * @return ResponseEntity with a map of field names and error messages.
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
+    public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        logger.info("Validation exception: {}", ex.getMessage());
+
         List<ObjectError> allErrors = ex.getBindingResult().getAllErrors();
         Map<String, Object> response = new HashMap<>();
-        allErrors.stream().forEach(objectError -> {
-            String message = objectError.getDefaultMessage(); //message
-            String field = ((FieldError)objectError).getField(); //key
+        allErrors.forEach(objectError -> {
+            String message = objectError.getDefaultMessage();
+            String field = ((FieldError) objectError).getField();
             response.put(field, message);
         });
 
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    //handle bad api request
+    /**
+     * Handles BadApiRequestException and returns a response with BAD_REQUEST status.
+     *
+     * @param ex The BadApiRequestException instance.
+     * @return ResponseEntity with ApiResponseMessage containing error details.
+     */
     @ExceptionHandler(BadApiRequestException.class)
-    public ResponseEntity<ApiResponseMessage> handleBadApiRequest(BadApiRequestException ex){
+    public ResponseEntity<ApiResponseMessage> handleBadApiRequest(BadApiRequestException ex) {
+        logger.info("Bad API request: {}", ex.getMessage());
 
-        logger.info("Bad api request !!!");
         ApiResponseMessage response = ApiResponseMessage.builder()
                 .message(ex.getMessage())
                 .status(HttpStatus.BAD_REQUEST)
