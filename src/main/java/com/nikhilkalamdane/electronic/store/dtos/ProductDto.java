@@ -1,6 +1,5 @@
 package com.nikhilkalamdane.electronic.store.dtos;
 
-import com.nikhilkalamdane.electronic.store.entities.Category;
 import lombok.*;
 
 import java.util.Date;
