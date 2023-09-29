@@ -26,9 +26,14 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private ModelMapper mapper;
 
+    /**
+     * Create a new category.
+     *
+     * @param categoryDto The CategoryDto object containing category information.
+     * @return The created CategoryDto.
+     */
     @Override
     public CategoryDto create(CategoryDto categoryDto) {
-
         String categoryID = UUID.randomUUID().toString();
         categoryDto.setCategoryId(categoryID);
 
@@ -37,9 +42,17 @@ public class CategoryServiceImpl implements CategoryService {
         return mapper.map(savedCategory, CategoryDto.class);
     }
 
+    /**
+     * Update an existing category.
+     *
+     * @param categoryDto The updated CategoryDto.
+     * @param categoryId  The ID of the category to update.
+     * @return The updated CategoryDto.
+     */
     @Override
     public CategoryDto update(CategoryDto categoryDto, String categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(("Category not fount with given ID")));
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with given ID"));
         category.setTitle(categoryDto.getTitle());
         category.setDescription(categoryDto.getDescription());
         category.setCoverImage(category.getCoverImage());
@@ -49,17 +62,32 @@ public class CategoryServiceImpl implements CategoryService {
         return mapper.map(updatedCategory, CategoryDto.class);
     }
 
+    /**
+     * Delete a category by ID.
+     *
+     * @param categoryId The ID of the category to delete.
+     */
     @Override
     public void delete(String categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(("Category not fount with given ID")));
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with given ID"));
         categoryRepository.delete(category);
     }
 
+    /**
+     * Get a paginated list of categories.
+     *
+     * @param pageNumber The page number to retrieve.
+     * @param pageSize   The number of categories per page.
+     * @param sortBy     The field to sort by.
+     * @param sortDir    The sort direction (asc or desc).
+     * @return A PageableResponse containing a list of CategoryDto objects.
+     */
     @Override
     public PageableResponse<CategoryDto> getAll(int pageNumber, int pageSize, String sortBy, String sortDir) {
         Sort sort = (sortDir.equalsIgnoreCase("desc")) ?
-                (Sort.by(sortBy).descending()) :
-                (Sort.by(sortBy).ascending()) ;
+                Sort.by(sortBy).descending() :
+                Sort.by(sortBy).ascending();
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<Category> page = categoryRepository.findAll(pageable);
@@ -68,9 +96,16 @@ public class CategoryServiceImpl implements CategoryService {
         return pageableResponse;
     }
 
+    /**
+     * Get a category by ID.
+     *
+     * @param categoryId The ID of the category to retrieve.
+     * @return The CategoryDto for the specified ID.
+     */
     @Override
     public CategoryDto get(String categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(("Category not fount with given ID")));
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with given ID"));
         return mapper.map(category, CategoryDto.class);
     }
 }

@@ -12,6 +12,7 @@ public class BadApiRequestException extends RuntimeException {
 
     /**
      * Constructs a new BadApiRequestException with a default message.
+     * The default message is "Bad Request !!!".
      */
     public BadApiRequestException() {
         super("Bad Request !!!");

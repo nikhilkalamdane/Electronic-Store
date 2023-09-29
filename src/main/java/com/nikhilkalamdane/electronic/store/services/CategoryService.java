@@ -3,23 +3,53 @@ package com.nikhilkalamdane.electronic.store.services;
 import com.nikhilkalamdane.electronic.store.dtos.CategoryDto;
 import com.nikhilkalamdane.electronic.store.dtos.PageableResponse;
 
+/**
+ * Service interface for managing product categories.
+ */
 public interface CategoryService {
 
-    //create
+    /**
+     * Creates a new product category.
+     *
+     * @param categoryDto The CategoryDto containing information about the new category.
+     * @return The created CategoryDto.
+     */
     CategoryDto create(CategoryDto categoryDto);
 
-    //update
+    /**
+     * Updates an existing product category.
+     *
+     * @param categoryDto The updated CategoryDto.
+     * @param categoryId  The ID of the category to update.
+     * @return The updated CategoryDto.
+     */
     CategoryDto update(CategoryDto categoryDto, String categoryId);
 
-    //delete
+    /**
+     * Deletes a product category by its ID.
+     *
+     * @param categoryId The ID of the category to delete.
+     */
     void delete(String categoryId);
 
-    //get all
+    /**
+     * Retrieves a paginated list of product categories.
+     *
+     * @param pageNumber The page number.
+     * @param pageSize   The number of categories per page.
+     * @param sortBy     The field to sort by.
+     * @param sortDir    The sorting direction ("asc" for ascending, "desc" for descending).
+     * @return A PageableResponse containing a list of CategoryDto.
+     */
     PageableResponse<CategoryDto> getAll(int pageNumber, int pageSize, String sortBy, String sortDir);
 
-    //get category by id
+    /**
+     * Retrieves a product category by its ID.
+     *
+     * @param categoryId The ID of the category to retrieve.
+     * @return The CategoryDto representing the category.
+     */
     CategoryDto get(String categoryId);
 
-    //search
-
+    // You can add a method signature for category searching here if needed.
 }

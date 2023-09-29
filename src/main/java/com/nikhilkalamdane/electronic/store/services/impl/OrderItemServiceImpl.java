@@ -40,7 +40,12 @@ public class OrderItemServiceImpl implements OrderService {
     @Autowired
     private ModelMapper modelMapper;
 
-
+    /**
+     * Create an order based on the provided order details.
+     *
+     * @param orderDto The CreateOrderRequest containing order details.
+     * @return The created OrderDto.
+     */
     @Override
     public OrderDto createOrder(CreateOrderRequest orderDto) {
 
@@ -52,7 +57,7 @@ public class OrderItemServiceImpl implements OrderService {
 
         List<CartItem> cartItems = cart.getItems();
 
-        if(cartItems.size() < 1){
+        if (cartItems.size() < 1) {
             throw new BadApiRequestException("Invalid number of items in cart");
         }
 
@@ -67,7 +72,6 @@ public class OrderItemServiceImpl implements OrderService {
                 .orderId(UUID.randomUUID().toString())
                 .user(user)
                 .build();
-
 
         AtomicReference<Integer> orderAmount = new AtomicReference<>(0);
 
@@ -95,23 +99,42 @@ public class OrderItemServiceImpl implements OrderService {
         return modelMapper.map(savedOrder, OrderDto.class);
     }
 
+    /**
+     * Remove an order by its ID.
+     *
+     * @param orderId The ID of the order to remove.
+     */
     @Override
     public void removeOrder(String orderId) {
 
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Given orderId not found !!!"));
         orderRepository.delete(order);
-
     }
 
+    /**
+     * Get a list of orders for a specific user.
+     *
+     * @param userId The ID of the user to retrieve orders for.
+     * @return A list of OrderDto objects.
+     */
     @Override
     public List<OrderDto> getOrdersOfUser(String userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with given id !!!"));
         List<Order> orders = orderRepository.findByUser(user);
-        List<OrderDto> orderDtos = orders.stream().map(order ->  modelMapper.map(order, OrderDto.class)).collect(Collectors.toList());
+        List<OrderDto> orderDtos = orders.stream().map(order -> modelMapper.map(order, OrderDto.class)).collect(Collectors.toList());
 
         return orderDtos;
     }
 
+    /**
+     * Get a paginated list of orders.
+     *
+     * @param pageNumber The page number to retrieve.
+     * @param pageSize   The number of orders per page.
+     * @param sortBy     The field to sort by.
+     * @param sortDir    The sort direction (asc or desc).
+     * @return A PageableResponse containing a list of OrderDto objects.
+     */
     @Override
     public PageableResponse<OrderDto> getOrders(int pageNumber, int pageSize, String sortBy, String sortDir) {
         Sort sort = (sortDir.equalsIgnoreCase("desc")) ?

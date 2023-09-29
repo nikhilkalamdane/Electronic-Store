@@ -20,6 +20,14 @@ public class FileServiceImpl implements FileService {
 
     private final Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
 
+    /**
+     * Uploads an image file to the specified path.
+     *
+     * @param file The MultipartFile containing the image file.
+     * @param path The path to upload the image to.
+     * @return The generated unique file name for the uploaded image.
+     * @throws IOException If there is an error while handling the file.
+     */
     @Override
     public String uploadImage(MultipartFile file, String path) throws IOException {
         String originalFileName = file.getOriginalFilename();
@@ -37,6 +45,14 @@ public class FileServiceImpl implements FileService {
         return generatedFileName;
     }
 
+    /**
+     * Retrieves a resource (file) from the specified path and name.
+     *
+     * @param path The path where the resource is located.
+     * @param name The name of the resource to retrieve.
+     * @return An InputStream for the retrieved resource.
+     * @throws FileNotFoundException If the resource is not found.
+     */
     @Override
     public InputStream getResource(String path, String name) throws FileNotFoundException {
         String fullPath = Paths.get(path, name).toString();

@@ -3,10 +3,9 @@ package com.nikhilkalamdane.electronic.store.dtos;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+/**
+ * A DTO (Data Transfer Object) representing a request to create an order.
+ */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,23 +14,65 @@ import java.util.List;
 @ToString
 public class CreateOrderRequest {
 
-    @NotBlank(message = "Cart id is required!")
+    /**
+     * The ID of the cart associated with the order.
+     */
+    @NotBlank(message = "Cart ID is required!")
     private String cartId;
 
-    @NotBlank(message = "User id is required!")
+    /**
+     * The ID of the user placing the order.
+     */
+    @NotBlank(message = "User ID is required!")
     private String userId;
 
+    /**
+     * The order status, which is initially set to "PENDING".
+     */
     private String orderStatus = "PENDING";
+
+    /**
+     * The payment status, which is initially set to "NOT_PAID".
+     */
     private String paymentStatus = "NOT_PAID";
+
+    /**
+     * The total order amount.
+     */
     private int orderAmount;
 
+    /**
+     * The name for billing.
+     */
     @NotBlank(message = "Name is required!")
     private String billingName;
 
+    /**
+     * The billing address.
+     */
     @NotBlank(message = "Address is required!")
     private String billingAddress;
 
+    /**
+     * The phone number for billing.
+     */
     @NotBlank(message = "Phone is required!")
     private String billingPhone;
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "CreateOrderRequest{" +
+                "cartId='" + cartId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", orderStatus='" + orderStatus + '\'' +
+                ", paymentStatus='" + paymentStatus + '\'' +
+                ", orderAmount=" + orderAmount +
+                ", billingName='" + billingName + '\'' +
+                ", billingAddress='" + billingAddress + '\'' +
+                ", billingPhone='" + billingPhone + '\'' +
+                '}';
+    }
 }

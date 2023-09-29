@@ -6,19 +6,44 @@ import com.nikhilkalamdane.electronic.store.dtos.PageableResponse;
 
 import java.util.List;
 
+/**
+ * Service interface for managing orders.
+ */
 public interface OrderService {
 
-    //create order
+    /**
+     * Creates a new order.
+     *
+     * @param orderDto The CreateOrderRequest containing information about the new order.
+     * @return The created OrderDto.
+     */
     OrderDto createOrder(CreateOrderRequest orderDto);
 
-    //remove order
+    /**
+     * Removes an order by its ID.
+     *
+     * @param orderId The ID of the order to remove.
+     */
     void removeOrder(String orderId);
 
-    //get orders of user
+    /**
+     * Retrieves a list of orders placed by a user.
+     *
+     * @param userId The ID of the user.
+     * @return A list of OrderDto representing the user's orders.
+     */
     List<OrderDto> getOrdersOfUser(String userId);
 
-    //get orders
+    /**
+     * Retrieves a paginated list of orders.
+     *
+     * @param pageNumber The page number.
+     * @param pageSize   The number of orders per page.
+     * @param sortBy     The field to sort by.
+     * @param sortDir    The sorting direction ("asc" for ascending, "desc" for descending).
+     * @return A PageableResponse containing a list of OrderDto.
+     */
     PageableResponse<OrderDto> getOrders(int pageNumber, int pageSize, String sortBy, String sortDir);
 
-
+    // You can add more order-related methods here if needed.
 }

@@ -44,6 +44,12 @@ public class UserServiceImpl implements UserService {
 
     private final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
+    /**
+     * Create a new user.
+     *
+     * @param userDto The UserDto containing user details.
+     * @return The created UserDto.
+     */
     @Override
     public UserDto createUser(UserDto userDto) {
         logger.info("Creating user: {}", userDto.getName());
@@ -62,9 +68,13 @@ public class UserServiceImpl implements UserService {
         return entityToDto(savedUser);
     }
 
-
-
-
+    /**
+     * Update an existing user's information.
+     *
+     * @param userDto The UserDto containing updated user details.
+     * @param userId  The ID of the user to update.
+     * @return The updated UserDto.
+     */
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
         logger.info("Updating user: {}", userId);
@@ -89,7 +99,11 @@ public class UserServiceImpl implements UserService {
         return entityToDto(updatedUser);
     }
 
-
+    /**
+     * Delete a user by ID.
+     *
+     * @param userId The ID of the user to delete.
+     */
     @Override
     public void deleteUser(String userId) {
         logger.info("Deleting user: {}", userId);
@@ -118,39 +132,65 @@ public class UserServiceImpl implements UserService {
         logger.info("User deleted: {}", userId);
     }
 
+    /**
+     * Get a paginated list of all users.
+     *
+     * @param pageNumber The page number to retrieve.
+     * @param pageSize   The number of users per page.
+     * @param sortBy     The field to sort by.
+     * @param sortDir    The sort direction (asc or desc).
+     * @return A PageableResponse containing a list of UserDto objects.
+     */
     @Override
     public PageableResponse<UserDto> getAllUsers(int pageNumber, int pageSize, String sortBy, String sortDir) {
-
         Sort sort = (sortDir.equalsIgnoreCase("desc")) ?
                 (Sort.by(sortBy).descending()) :
-                (Sort.by(sortBy).ascending()) ;
+                (Sort.by(sortBy).ascending());
 
-        //By default, page number starts from 0
+        // By default, page number starts from 0
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
         Page<User> page = userRepository.findAll(pageable);
 
-        PageableResponse<UserDto> response =  Helper.getPageableResponse(page, UserDto.class);
+        PageableResponse<UserDto> response = Helper.getPageableResponse(page, UserDto.class);
 
         return response;
     }
 
+    /**
+     * Get a user by ID.
+     *
+     * @param userId The ID of the user to retrieve.
+     * @return The UserDto representing the user.
+     */
     @Override
     public UserDto getUserById(String userId) {
-
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with given id!!!"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with given id: " + userId));
         return entityToDto(user);
     }
-
+    /**
+     * Get a user by email.
+     *
+     * @param email The email of the user to retrieve.
+     * @return The UserDto representing the user.
+     */
     @Override
     public UserDto getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("User not found with given email!!!"));
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with given email: " + email));
         return entityToDto(user);
     }
 
+    /**
+     * Search for users by name containing a specified keyword.
+     *
+     * @param keyword The keyword to search for in user names.
+     * @return A list of UserDto objects that match the search criteria.
+     */
     @Override
     public List<UserDto> searchUsers(String keyword) {
         List<User> users = userRepository.findByNameContaining(keyword);
-        List<UserDto> usersDtoList = users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
+        List<UserDto> usersDtoList = users.stream().map(this::entityToDto).collect(Collectors.toList());
         return usersDtoList;
     }
 
