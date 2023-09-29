@@ -3,7 +3,6 @@ package com.nikhilkalamdane.electronic.store.services;
 import com.nikhilkalamdane.electronic.store.dtos.PageableResponse;
 import com.nikhilkalamdane.electronic.store.dtos.ProductDto;
 
-import java.util.List;
 
 public interface ProductService {
 
